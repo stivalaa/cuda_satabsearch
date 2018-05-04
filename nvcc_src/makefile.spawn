@@ -1,0 +1,15 @@
+# NB need to build and run spawnTwisters on a 32 bit system to get 
+# correct MersenneTwister.raw file
+# ADS, Jan. 2010
+# $Id$
+CFLAGS = -Wall 
+CC = gcc
+
+DCHOME = $(HOME)/dcmt0.4
+
+spawnTwisters:   spawnTwisters.c
+	$(CC) $(CFLAGS) -I$(DCHOME)/include -L$(DCHOME)/lib -o spawnTwisters spawnTwisters.c -ldcmt
+
+
+clean: 
+	rm spawnTwisters

@@ -1,0 +1,6 @@
+parsetableaux.o: parsetableaux.c parsetableaux.h saparams.h
+genmtrand.o: genmtrand.c dci.h
+MersenneTwister_gold.o: MersenneTwister_gold.cpp MersenneTwister.h dci.h
+MersenneTwister.o: MersenneTwister.h
+parsetableaux.o: parsetableaux.h saparams.h
+cudaSaTabsearch_kernel.o: cudaSaTabsearch_kernel.h saparams.h

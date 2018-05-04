@@ -1,0 +1,21 @@
+CUDA C implementation of the simulated annealing local search implementation
+using the NVIDIA nvcc compiler
+
+As per NVIDIA CUDA SDK (2.3) license agreement:
+
+"This software contains source code provided by NVIDIA Corporation."
+
+Namely, the parallel Mersenne Twister pseudo-random number generator.
+Note also the data files were regenerated to have 65536 rather than
+only 4096 generators, using the spawnTwisters.c program from the CUDA SDK and
+dci0.4 from http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/DC/dc.html
+
+NB on tango.vpac.org must 
+
+module load cuda
+module load gcc/4.3.4
+
+as CUDA programs will only compile with gcc 4.3 not 4.4
+ 
+ADS
+Wed Jan 20 16:08:21 EST 2010
