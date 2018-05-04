@@ -1,0 +1,13 @@
+CUDA C implementation of the simulated annealing local search implementation
+using the NVIDIA nvcc compiler and CUDA 5.0.35
+
+If you use this software in your research, please cite:
+
+Stivala, A., Stuckey, P., Wirth, A., "Fast and accurate protein 
+substructure searching with simulated annealing and GPUs"
+BMC Bioinformatics 2010, 11:446
+
+
+
+ADS
+Mon Nov 18 11:25:21 EST 2013
