@@ -1,0 +1,5 @@
+parsetableaux.o: parsetableaux.c parsetableaux.h saparams.h
+gumbelstats.o: gumbelstats.c
+parsetableaux.o: parsetableaux.h saparams.h
+cudaSaTabsearch_kernel.o: cudaSaTabsearch_kernel.h saparams.h
+gumbelstats.o: gumbelstats.h

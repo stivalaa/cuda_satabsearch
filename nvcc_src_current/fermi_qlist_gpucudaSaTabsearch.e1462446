@@ -1,0 +1,95 @@
+Loading database...
+Loaded 16602 db entries (668 order > 32) in 582.853027 ms
+Building query index list...
+Built query index (7 queries (2 large)) in 2.003000 ms
+found 2 CUDA devices
+found Fermi architecture (compute capability 2.0) device 0: Tesla M2070
+using device 0: Tesla M2070
+maxstart = 8192
+Execution configuration: Grid = (128,1,1) Block = (128,1,1)
+using shared memory for small db structs: YES
+Copying database to device...
+Initialized device RNG with 16384 states (768 KB) in 4.888000 ms
+d_tableaux.pitch == 512 xsize == 32 ysize == 32
+d_distmatrices.pitch == 512 xsize == 128 ysize == 32
+srcPtr.pitch == 32
+distmatrices srcPtr.pitch == 128
+Copied 15934 entries to GPU in 104.488998 ms
+Copying query to constant memory took 0.106000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d1ndda_...
+xxx_qn=8
+GPU execution time 34161.691406 ms
+382.098551 million iterations/sec
+Copying query to constant memory took 0.113000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d1wnda_...
+xxx_qn=39
+GPU execution time 240089.531250 ms
+54.367772 million iterations/sec
+Copying query to constant memory took 0.121000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d1rrva_...
+xxx_qn=31
+GPU execution time 183441.890625 ms
+71.156772 million iterations/sec
+Copying query to constant memory took 0.110000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d1muka_...
+xxx_qn=101
+GPU execution time 1073984.625000 ms
+12.153929 million iterations/sec
+Copying query to constant memory took 0.114000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d2byla1...
+xxx_qn=31
+GPU execution time 179380.437500 ms
+72.767872 million iterations/sec
+Copying query to constant memory took 0.107000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d1a32a_...
+xxx_qn=4
+GPU execution time 12658.790039 ms
+1031.151695 million iterations/sec
+Copying query to constant memory took 0.097000 ms
+Executing simulated annealing tableaux match kernel ( shared memory) on GPU for qid d1mjta_...
+xxx_qn=31
+GPU execution time 182179.109375 ms
+71.649998 million iterations/sec
+Copying large structure database to device...
+d_tableaux.pitch == 512 xsize == 111 ysize == 111
+d_distmatrices.pitch == 512 xsize == 444 ysize == 111
+srcPtr.pitch == 111
+distmatrices srcPtr.pitch == 444
+Copied 668 large entries to GPU in 29.541000 ms
+Copying query to constant memory took 0.098000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d1ndda_...
+xxx_qn_noshared=8
+GPU (no shared memory) execution time 3683.333008 ms
+148.568049 million iterations/sec
+Copying query to constant memory took 0.098000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d1wnda_...
+xxx_qn_noshared=39
+GPU (no shared memory) execution time 12152.178711 ms
+45.031069 million iterations/sec
+Copying query to constant memory took 0.087000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d1rrva_...
+xxx_qn_noshared=31
+GPU (no shared memory) execution time 10498.203125 ms
+52.125644 million iterations/sec
+Copying query to constant memory took 0.092000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d1muka_...
+xxx_qn_noshared=101
+GPU (no shared memory) execution time 32058.414062 ms
+17.069640 million iterations/sec
+Copying query to constant memory took 0.091000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d2byla1...
+xxx_qn_noshared=31
+GPU (no shared memory) execution time 10281.962891 ms
+53.221900 million iterations/sec
+Copying query to constant memory took 0.089000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d1a32a_...
+xxx_qn_noshared=4
+GPU (no shared memory) execution time 1090.630005 ms
+501.751829 million iterations/sec
+Copying query to constant memory took 0.088000 ms
+Executing simulated annealing tableaux match kernel (no shared memory) on GPU for qid d1mjta_...
+xxx_qn_noshared=31
+GPU (no shared memory) execution time 9954.689453 ms
+54.971640 million iterations/sec
+1986.09user 3.78system 33:10.36elapsed 99%CPU (0avgtext+0avgdata 600224maxresident)k
+0inputs+9632outputs (0major+22922minor)pagefaults 0swaps
