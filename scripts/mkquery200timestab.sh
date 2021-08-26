@@ -14,7 +14,7 @@
 #
 # Uses options specific to GNU sort
 #
-# $Id: mkquery200timestab.sh 3202 2010-01-04 00:26:06Z alexs $
+# $Id: mkquery200timestab.sh 3909 2010-07-11 04:45:25Z alexs $
 #
 
 if [ $# -ne 0 ]; then
@@ -31,7 +31,7 @@ EOF
 
 baseline_s=0
 
-for statsfile in ../tango_results_umfpack/query200/norm2/*.stats ../tango_results_pardiso/query200/norm2/*.stats ../tango_results_ma57/query200/norm2/*.stats ../tango_results_umfpack/query200-minlen4/norm2/*.stats  ../tango_results/localsearch/query200/norm2/*.stats
+for statsfile in ../tango_results_umfpack/query200/norm2/*.stats ../tango_results_pardiso/query200/norm2/*.stats ../tango_results_ma57/query200/norm2/*.stats ../tango_results_umfpack/query200-minlen4/norm2/*.stats  #../tango_results/localsearch/query200/norm2/*.stats
 do
     resdir=`echo ${statsfile} | cut -d/ -f2`
     if [ ${resdir} = "tango_results_pardiso" ]; then

@@ -7,7 +7,7 @@
 # Author:  Alex Stivala
 # Created: June 2008
 #
-# $Id: soln2ssemap.py 2703 2009-07-27 06:01:05Z astivala $
+# $Id: soln2ssemap.py 4135 2010-09-07 06:51:43Z alexs $
 # 
 ###############################################################################
 
@@ -79,7 +79,8 @@ class QuerySoln:
 def parse_searchsoln(fh, domid=None):
     """
     Parse the output of tsrchn/tsrchd with LSOLN set to .true.
-    so each structure has first structure name and score, then
+    so each structure has first structure name and
+    scores (raw,nor2m,zscore,pvalue), then
     x vector one element per line e.g. 
     
     # TSRCHD LTYPE = T LORDER = T LSOLN = T
@@ -87,14 +88,14 @@ def parse_searchsoln(fh, domid=None):
     # DBFILE = /local/charikar/astivala/tableauxdb/astral/tableauxdb.ascii                     
     # Mon Aug  4 12:34:07 2008
 
-    d1xksa_ -35.99999999
+    d1xksa_  41 1.51852 0.903567  0.161557
       0.0000
       1.0000
       0.0000
       0.0000
       0.0000
       ...
-    d3sila_ -35.99999999
+    d3sila_  21 0.823529 -1.27278 0.943443
       0.0000
       ...
       etc.
@@ -134,13 +135,14 @@ def parse_searchsoln(fh, domid=None):
                     query_soln = None # appended here, don't do again
                     break # if only getting one, we have finished
             splitline = line.split()
-            if len(splitline) != 2:
+            if len(splitline) != 5:
                 sys.stderr.write('bad line: ' + line + '\n')
                 continue
             domainid = splitline[0]
             if (domid and domid != domainid):
                 continue # only interested in domid, skip others
-            score_str = splitline[1]
+            score_str = splitline[1] # raw score
+#            score_str = splitline[4] # now use pvalue
             if score_str.lower() == 'nan' or score_str == '********':
                 # if we get any NaN values then then sort() gets completely
                 # screwed up and the evaluation is all wrong, so skip them.
@@ -271,21 +273,22 @@ def main():
                   (probably get ValueError on Numeric.reshape()).
                  
     Input is on stdin, the output of tsrchn/tsrchd with LSOLN set to .true.
-    so each structure has first structure name and score, then
+    so each structure has first structure name and
+    scores (raw, norm2, zscore, pvalue), then
     x vector one element per line e.g. 
     
     # TSRCHD LTYPE = T LORDER = T LSOLN = T
     # QUERY ID = D1KI9A_ 
     # DBFILE = /local/charikar/astivala/tableauxdb/astral/tableauxdb.ascii                     
     # Mon Aug  4 12:34:07 2008
-    d1xksa_ -35.99999999
+    d1xksa_  41 1.51852 0.903567  0.161557    
       0.0000
       1.0000
       0.0000
       0.0000
       0.0000
       ...
-    d3sila_ -35.99999999
+    d3sila_  21 0.823529 -1.27278 0.943443    
       0.0000
       ...
       etc.
@@ -371,7 +374,7 @@ def main():
             n2 = dim_dict[query_soln.domid]
             matchmat = soln_list_to_matrix(query_soln.soln, n1, n2)
             matchlist = matrix_to_tuplelist(matchmat)
-            sys.stdout.write('%s %12.4f\n' % (query_soln.domid,query_soln.score))
+            sys.stdout.write('%s %g\n' % (query_soln.domid,query_soln.score))
             for (i,j) in matchlist:
                 sys.stdout.write(str(i) + ' ' + str(j) + '\n')
             sys.stdout.write('\n')

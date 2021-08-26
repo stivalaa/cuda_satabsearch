@@ -14,7 +14,7 @@
 # Output is to stdout.
 #
 #
-# $Id: sarf2_6col_to_score.py 3585 2010-04-29 03:56:03Z alexs $
+# $Id: sarf2_6col_to_score.py 3695 2010-05-18 07:32:14Z alexs $
 #
 
 

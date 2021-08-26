@@ -6,7 +6,7 @@
 # Author:  Alex Stivala
 # Created: June 2008
 #
-# $Id: parsessemap.py 3120 2009-12-24 04:42:47Z alexs $
+# $Id: parsessemap.py 4135 2010-09-07 06:51:43Z alexs $
 # 
 ###############################################################################
 
@@ -44,7 +44,7 @@ class QuerySSEMap:
 #-----------------------------------------------------------------------------
 
 
-def parse_ssemap(fh):
+def parse_ssemap(fh, use5col=False):
     """
     Parse the output of soln2ssemap.py;
     identifier and score (as per input), then
@@ -69,11 +69,20 @@ def parse_ssemap(fh):
     11 6
     14 9
 
+
+    If use5col=True then the id/score line is like:
+
+    d1wiua_  41 1.51852 0.903567  0.161557
+
+    instead of only name and score it also has norm2score, zscore, pvalue;
+    and we return pvalue as score instead of raw score.
+    
     Note the header 'comment' information is required, we get the QUERY ID
     from it.
 
     Parameters:
         fh - open (read) filehandle to parse from
+        use5col - use the new 5-column format not old 2-column format for score
         
     Return value:
         search_maps - dummy class SearchMap containing:
@@ -102,11 +111,16 @@ def parse_ssemap(fh):
             if query_ssemap:
                 query_ssemap_list.append(query_ssemap) # finsished with prev one
             splitline = line.split()
-            if len(splitline) != 2:
+            if ( (use5col and len(splitline) != 5) or
+                 (not use5col and len(splitline) != 2) ):
                 sys.stderr.write('bad line: ' + line + '\n')
                 continue
             domainid = splitline[0]
-            score_str = splitline[1]
+            if use5col:
+                score_str = splitline[1] # go back to using raw score for now
+#                score_str = splitline[4]
+            else:
+                score_str = splitline[1]
             query_ssemap = QuerySSEMap()
             query_ssemap.domid = domainid
             query_ssemap.sse_map = []

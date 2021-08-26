@@ -60,7 +60,7 @@
 # matching between two structures and examining the result correspondence
 # between SSEs.
 # 
-# $Id: qptabmatchstructs.sh 3464 2010-03-15 05:38:48Z alexs $
+# $Id: qptabmatchstructs.sh 3705 2010-05-23 02:45:50Z alexs $
 # 
 ###############################################################################
 
@@ -153,7 +153,7 @@ if [ $heuristic -eq 0 ]; then
     PROGRAM=tsrchd_sparse
     solnremap_stage="soln2ssemap.py -q ${qsize}"
 else
-    PROGRAM="cudaSaTabsearch -c -r2048"
+    PROGRAM="cudaSaTabsearch -c -r4096"
     solnremap_stage=cat  # outputs sse map directly, no need to convert
 fi
 

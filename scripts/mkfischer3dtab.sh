@@ -18,7 +18,7 @@
 #
 # Uses options specific to GNU sort
 #
-# $Id: mkfischer3dtab.sh 1961 2008-10-07 06:08:06Z astivala $
+# $Id: mkfischer3dtab.sh 4055 2010-08-16 05:05:07Z alexs $
 #
 
 if [ $# -ne 2 ]; then
@@ -37,7 +37,7 @@ do
     fi
     resdir=`echo ${statsdir} | cut -d/ -f1`
     if [ ${resdir} = "results" ]; then
-        method="QP tableau search"
+        method="QP Tableau Search"
     elif [ ${resdir} = "maxcmo_results" ]; then
         method="MSVNS3"
     else

@@ -18,7 +18,7 @@
 #
 # Uses options specific to GNU sort
 #
-# $Id: mkquery200tab.sh 2153 2009-03-28 05:20:23Z astivala $
+# $Id: mkquery200tab.sh 4052 2010-08-16 04:22:55Z alexs $
 #
 
 if [ $# -ne 0 ]; then
@@ -54,7 +54,7 @@ do
     fi
     resdir=`echo ${statsfile} | cut -d/ -f1`
     if [ ${resdir} = "results" ]; then
-        method="QP tableau search"
+        method="QP Tableau Search"
     else
         method=`echo ${statsfile} | cut -d/ -f2`
         if [ "${method}" != "TableauSearch" ]; then

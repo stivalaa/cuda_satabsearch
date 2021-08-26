@@ -18,7 +18,7 @@
 # fixed column where fields can end up too large so no space between them,
 # and yet don't always START in same column.
 #
-# $Id: sarf2out6col.py 3583 2010-04-29 02:11:46Z alexs $
+# $Id: sarf2out6col.py 3695 2010-05-18 07:32:14Z alexs $
 #
 
 

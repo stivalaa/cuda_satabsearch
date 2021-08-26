@@ -4,16 +4,18 @@
 # Author:  Alex Stivala
 # Created: April 2010
 #
-# $Id: fakepdb_to_cops.py 3686 2010-05-17 07:31:00Z alexs $
+# $Id: fakepdb_to_cops.py 3909 2010-07-11 04:45:25Z alexs $
 """
  fakepdb_to_cops.py - Convert fake PDB identifers back to COPS identifiers
 
- Usage: fakepdb_to_cops.py < DaliteLite-2col-output
+ Usage: fakepdb_to_cops.py [fakepdbids_filename] < DaliteLite-2col-output
 
  The input file is 2 column from dalilitout2col.py
  on stdin.
  Output is to stdout.
 
+  If the fakepdbids_filename is supplied, the translation table is read
+  from it, toerhwise the COPS file is used.
 
  Note that DaliLite ONLY allows 4 char PDB codes, with chain appended, so
  SCOP or COPS type codes will not work in cases where there are more than
@@ -68,13 +70,17 @@ def main():
     """
     main for fakepdb_to_cops.py - see usage message at file header
     """
-    if len(sys.argv) != 1:
+    if len(sys.argv) == 2:
+        fakeids_filename = sys.argv[1]
+    elif len(sys.argv) == 1:
+        fakeids_filename = COPS_FAKEPDBIDS_FILE
+    else:
         usage(os.path.basename(sys.argv[0]))
 
-    FAKE_TO_COPS_DICT = parse_fakepdbids_file(COPS_FAKEPDBIDS_FILE)[0]
+    FAKE_TO_COPS_DICT = parse_fakepdbids_file(fakeids_filename)[0]
 
     for (score, dbid) in iter_searchresult(sys.stdin,multiquery=False):
-        sys.stdout.write("%s    %f\n" % (FAKE_TO_COPS_DICT[dbid], score))
+        sys.stdout.write("%s    %f\n" % (FAKE_TO_COPS_DICT[dbid[:4]], score))
 
             
 if __name__ == "__main__":

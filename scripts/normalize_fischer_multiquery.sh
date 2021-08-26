@@ -4,9 +4,9 @@
 # Author:  Alex Stivala
 # Created: October 2008
 #
-# normalize_fischer.sh - build all normalized scores files for Fischer db
+# normalize_fischer_multiquery.sh - build all normalized scores files for Fischer db
 #
-# Usage: normalize_fischer.sh 
+# Usage: normalize_fischer_multiquery.sh 
 #
 # Run from the fischer/ subdirectory: processes files under there
 # makeing norm1/ norm2/ norm3/ subdirectories,
@@ -16,7 +16,7 @@
 # The scripts/ directory (containing this scrpipt and the abovementioned ones)
 # must be in the PATH
 #
-# $Id: normalize_fischer_multiquery.sh 3571 2010-04-19 06:44:53Z alexs $
+# $Id: normalize_fischer_multiquery.sh 3909 2010-07-11 04:45:25Z alexs $
 
 TABMATCH_FISCHER_DIR=.
 
@@ -32,11 +32,8 @@ do
     if [ ! -d ${outdir} ]; then
         mkdir ${outdir}
     fi
-    for infile in ${TABMATCH_FISCHER_DIR}/*.out
-    do
-        qid=`basename ${infile} .out`
-        outfile=${outdir}/${qid}.out
-        normalize_tabmatch.py ${norm} -m ${TABLEAUX_FISCHER_DIR} < ${infile} > ${outfile}
-    done
+    infile=fischer.out
+    outfile=${outdir}/fischer.out
+    normalize_tabmatch.py ${norm} -m ${TABLEAUX_FISCHER_DIR} < ${infile} > ${outfile}
 done
 
