@@ -527,8 +527,8 @@ static void usage(const char *progname)
 
 int main(int argc, char *argv[])
 {
-  CUTThread threadID[MAX_THREADS];
-  int num_threads = 0;
+//  CUTThread threadID[MAX_THREADS];
+//  int num_threads = 0;
   int exit_status = 0;
   char buf[MAX_LINE_LEN];
   char qtab[MAXDIM*MAXDIM];

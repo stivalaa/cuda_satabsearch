@@ -54,9 +54,13 @@
 #if !defined(CUDA)
 #include <math.h>
 #include <driver_types.h> /* for struct cudaPitchedPtr, cudaExtent */
+#undef __constant__
 #define __constant__
+#undef __shared__
 #define __shared__ static
+#undef __global__
 #define __global__ 
+#undef __device__
 #define __device__
 #define curandState int
 #endif
