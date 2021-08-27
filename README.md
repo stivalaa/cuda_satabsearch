@@ -50,48 +50,46 @@ than running on a modern GPU.
 ## Tableaux database
 
 The tableaux database was built with 
-buildtableauxdb.py -t dssp -3 -5 -p none 
+`buildtableauxdb.py -t dssp -3 -5 -p none` 
 The distance matrices were built with 
-buildtableauxdb.py -t dssp -3 -5 -p none -d and the combined
+`buildtableauxdb.py -t dssp -3 -5 -p none -d` and the combined
 tableaux and distance matrix database in ASCII format created with
 the convdb2.py script, and sorted by size with the 
 sort_tableux_db_pbs_script.sh script.
-These scripts are included in the [scripts.tar.gz](scripts.tar.gz)
-file.
+These scripts are included in the scripts directory.
 
 ## Usage
 
-Usage: cudaSaTabsearch [-c] [-q dbfile] [-r restarts] < inputfile
+Usage: `cudaSaTabsearch [-c] [-q dbfile] [-r restarts] < inputfile`
 
--c : run on host CPU not GPU card
+`-c `: run on host CPU not GPU card
 
--q : query list mode: instead of reading query data on stdin
-     just as in the original Fortran version tlocsd, a list
+`-q` : query list mode: instead of reading query data on stdin
+     just as in the original Fortran version tlocsd (https://github.com/stivalaa/qptabsearch), a list
      of query sids to be read from the database is read on stdin (one per
      line),
      and db filenaame is specified on command
      line. In this mode options are assumed as LORDER=T, LTYPE=T,
      LSOLN=N. The output is still to stdout, but each query following
      immediately from the previous (can parse using the  header comment
-     niformation lines as separators.
+     information lines as separators).
 
--r restarts: number of restarts (iterations of cooling schedule).
+`-r restarts`: number of restarts (iterations of cooling schedule).
              Should be a multiple of blocksize. Defaults to 128.
 
-The 'database' to search is an ASCII file of  tableaux
-(Omega matrices) in format described in rdtabd.f.
+The 'database' to search is an ASCII file of tableaux
+(Omega matrices) in format described in rdtabd.f (https://github.com/stivalaa/qptabsearch).
 
 The results are printed to stdout as 
 
-name rawscore norm2score z-score p-value
-
+`name rawscore norm2score z-score p-value`
 
 Both the name of the database file to read, and the actual
 query tableau are read from stdin. 
 The first line is the name
 of the database file.
 The second line is for options. There are currently 3 logical
-options, for SSE type constraint (only allow SSEs of same type ot
+options, for SSE type constraint (only allow SSEs of same type to
 match) and ordering constraint (disallow out of sequence order 
 matches). The third is to output not just the scores but also solution
 vector values.
@@ -110,10 +108,13 @@ The diagonal entries are meaningless (self-angle) in tableaux,
 and are included instead to specify the SSE type, with
 the following codes:
 
+
+```
 e     beta strand
 xa    alpha helix
 xi    pi helix
 xg    3_10 helix
+```
 
 Width of identifier is 8 chars, blank padded on right,
 width of order is 4 digits, blank padded on left.
@@ -129,20 +130,22 @@ The diagonal entries are meaningless (self-distance)
 and are included instead to specify the SSE type, with
 the following codes:
 
+```
 0.000 beta strand
 1.000 alpha helix
 2.000 pi helix
 3.000 3_10 helix
+```
 
 Each entry in matrix is in Angstroms format
 F6.3 with a space between each on a line, and one line
 per row of matrix.
 
-
 E.g.:
 
+```
 /local/charikar/astivala/tableauxdb/astral/tableauxdistmatrixdb.ascii
- T T F
+T T F
 D1UBIA_    8
 e  
 OT e  
@@ -159,10 +162,10 @@ PE RT LE RD OT PE RT e
 10.588 13.738 11.815 10.527  0.000 
 15.025 18.692 17.143 15.341  6.466  0.000 
 15.298 17.276 16.276 20.075 13.264 11.610  3.000 
- 7.549 11.072 12.248 12.446  4.583  9.903 15.689  0.000 
+ 7.549 11.072 12.248 12.446  4.583  9.903 15.689  0.000
+ ```
 
-
-
+See `*.input` and `*.sh` files for  more examples.
 
 ## Reference
 
