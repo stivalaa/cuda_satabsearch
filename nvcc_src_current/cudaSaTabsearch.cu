@@ -593,6 +593,7 @@ int main(int argc, char *argv[])
     queryptr = queryid_list;
     while (!feof(stdin))
     {
+      fprintf(stderr, "XXX num_queries = %d\n", num_queries);
       if (num_queries > 0)
       {
         if ((!(queryid_list = (char *)realloc(queryid_list, (num_queries+1)*(LABELSIZE+1)))))
@@ -600,6 +601,7 @@ int main(int argc, char *argv[])
           fprintf(stderr, "realloc queryid_list failed\n");
           exit(1);
         }
+        queryptr = queryid_list + num_queries*(LABELSIZE+1);
       }
       if (!fgets(buf, MAX_LINE_LEN, stdin))
         break;
@@ -607,6 +609,7 @@ int main(int argc, char *argv[])
       queryptr[LABELSIZE-1] = '\0';
       if (queryptr[strlen(queryptr)-1] == '\n')
         queryptr[strlen(queryptr)-1] = '\0';
+      fprintf(stderr, "XXX queryptr = '%s'\n", queryptr);
       queryptr += (LABELSIZE+1);
       num_queries++;
     }
@@ -698,7 +701,7 @@ int main(int argc, char *argv[])
     }
     for (i = 0; i < num_queries; i++)
     {
-/*      fprintf(stderr, "zzz %s\n", queryid_list+i*(LABELSIZE+1)); */
+      fprintf(stderr, "zzz %s\n", queryid_list+i*(LABELSIZE+1));  //XXX
       bool found = false;
       for (j = 0; j < gpu_dbsize; j++) /* search 'small' structure dbase */
       {
