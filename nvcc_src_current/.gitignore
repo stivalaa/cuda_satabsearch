@@ -5,3 +5,8 @@ host_cudaSaTabsearch-*.out
 host_cudaSaTabsearch-*.err
 gpu_cudaSaTabsearch-*.out
 gpu_cudaSaTabsearch-*.err
+host_qlist_cudaSaTabsearch-*.err
+host_qlist_cudaSaTabsearch-*.out
+qlist_gpu_cudaSaTabsearch-*.err
+qlist_gpu_cudaSaTabsearch-*.out
+tags
