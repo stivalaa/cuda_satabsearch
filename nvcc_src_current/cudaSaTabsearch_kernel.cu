@@ -4,7 +4,6 @@
  * Author:  Alex Stivala
  * Created: January 2010
  *
- * $Id: cudaSaTabsearch_kernel.cu 4755 2013-11-20 03:46:36Z astivala $
  *
  * CUDA kernel for simulated annealing tableau matching (discrete).
  * This is a CUDA implemenation of the FORTRAN subroutine TSAMTD.

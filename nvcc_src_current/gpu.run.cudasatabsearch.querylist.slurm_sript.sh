@@ -10,7 +10,6 @@
 # in cwd (so run from results/tlocsd/ dir)
 # and running one at a time.
 #
-# $Id: fermi.run.cudasatabsearch.querylist.pbs_sript.sh 4760 2013-11-20 04:55:07Z astivala $
 #
 
 #SBATCH --job-name="qlist_gpu_cudaSaTabsearch"

@@ -4,7 +4,6 @@
  * Author:  Alex Stivala
  * Created: January 2010
  *
- * $Id: parsetableaux.c 4709 2013-11-18 00:18:33Z astivala $
  *
  * Functions to parse tableaux and distance matrices.
  * Equivalent to the FORTRAN subroutines RDTABD and RDISTM.

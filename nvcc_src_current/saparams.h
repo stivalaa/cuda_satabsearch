@@ -8,7 +8,6 @@
  *
  * Constants for CUDA simulated annealing tableau search
  *
- * $Id: saparams.h 4709 2013-11-18 00:18:33Z astivala $
  *
  *****************************************************************************/
 

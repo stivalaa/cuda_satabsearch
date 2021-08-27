@@ -10,7 +10,6 @@
 # in cwd (so run from results/tlocsd/ dir)
 # and running one at a time.
 #
-# $Id: host_run.cudasatabsearch.querylist.pbs_sript.sh 4764 2013-11-20 22:17:21Z astivala $
 #
 #SBATCH --job-name="host_qlist_cudaSaTabsearch"
 #SBATCH --ntasks=1

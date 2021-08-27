@@ -4,7 +4,6 @@
 # Author    : Alex Stivala
 # Created   : January 2010
 #
-# $Id: Makefile 4763 2013-11-20 05:15:15Z astivala $
 #
 # Makefile for building the the CUDA simulated annealing tableau matching code
 #
