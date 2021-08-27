@@ -1,19 +1,15 @@
 #!/bin/bash
+#SBATCH --job-name="gpu_cudaSaTabsearch"
+#SBATCH --time=0-00:00:20
+#SBATCH --partition=gpu
+#SBATCH --output=gpu_cudaSaTabsearch-%j.out
+#SBATCH --error=gpu_cudaSaTabsearch-%j.err
 
-# pbs launching script:
- 	
-# run on Fermi architecture (Tesla M2070) 
-
-#PBS -q gpu
-#PBS -N gpucudaSaTabsearch_fermi
-#PBS -l walltime=0:0:20
+echo -n "started at: " >&2; date >&2
 
 uname -a >&2
 
-module load cuda/5.0.35
-cd $PBS_O_WORKDIR
-set CONV_RSH = ssh
-
+module load cudatoolkit
 
 #/usr/bin/time ./cudaSaTabsearch -r4096  < d1ubia_.input
 
@@ -23,3 +19,4 @@ set CONV_RSH = ssh
 /usr/bin/time ./cudaSaTabsearch -r4096 < d2phlb1.input
 #/usr/bin/time ./cudaSaTabsearch < d1ubia_.input
 
+echo -n "ended at: " >&2; date >&2

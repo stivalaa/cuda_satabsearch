@@ -1,18 +1,15 @@
 #!/bin/bash
+#SBATCH --job-name="host_cudaSaTabsearch"
+#SBATCH --time=0-00:10:00
+#SBATCH --partition=slim
+#SBATCH --output=host_cudaSaTabsearch-%j.out
+#SBATCH --error=host_cudaSaTabsearch-%j.err
 
-# pbs launching script:
- 	
-#PBS -l nodes=1
-#PBS -N cpu_cudaSaTabsearch
-#PBS -l walltime=0:10:0
-
+echo -n "started at: " >&2; date >&2
 uname -a >&2
 
-module load cuda/5.0.35
-cd $PBS_O_WORKDIR
-set CONV_RSH = ssh
-
-
+module load cudatoolkit
 
 /usr/bin/time ./cudaSaTabsearch -c -r4096  < d2phlb1.input
 
+echo -n "ended at: " >&2; date >&2

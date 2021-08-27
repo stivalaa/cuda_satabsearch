@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# fermi.run.cudasatabsearch.querylist.pbs_sript.sh
+# gpu.run.cudasatabsearch.querylist.slurm_sript.sh
 #
-# Usage: qsub fermi.run.cudasatabsearch.querylist.pbs_sript.sh
+# Usage: sbatch gpu.run.cudasatabsearch.querylist.slurm_sript.sh
 #
 # run tlocsd
 # on list of sids in database
@@ -13,15 +13,14 @@
 # $Id: fermi.run.cudasatabsearch.querylist.pbs_sript.sh 4760 2013-11-20 04:55:07Z astivala $
 #
 
-# run on Fermi architecture (Tesla M2070) 
-#PBS -q gpu
-#PBS -N fermi_qlist_gpucudaSaTabsearch
-#PBS -l walltime=1:0:0
+#SBATCH --job-name="qlist_gpu_cudaSaTabsearch"
+#SBATCH --time=0-01:00:00
+#SBATCH --partition=gpu
+#SBATCH --output=qlist_gpu_cudaSaTabsearch-%j.out
+#SBATCH --error=qlist_gpu_cudaSaTabsearch-%j.err
 
-module load cuda/5.0.35
+module load cudatoolkit
 
-cd $PBS_O_WORKDIR
-set CONV_RSH = ssh
 
 TIME=/usr/bin/time
 TLOCSD=./cudaSaTabsearch
