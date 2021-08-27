@@ -895,7 +895,7 @@ void sa_tabsearch_host
   int n1,n2;
   int restart;
   int dbi;
-  int iState;
+  //int iState;
   size_t tab1_pitch, tab2_pitch,dmat1_pitch,dmat2_pitch;
   int i,j;
   int blockmaxscore;

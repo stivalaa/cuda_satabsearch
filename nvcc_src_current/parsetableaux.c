@@ -199,7 +199,7 @@ int parse_tableau(FILE *fp, size_t dim, int n, char *tab)
   int toolarge = 0;
   
   order = n;
-  if (n > dim)
+  if (n > (int)dim)
   {
     fprintf(stderr, "Tableau order %d is too large\n", n);
     order = -n;
@@ -460,6 +460,9 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
       num_skipped++;
       continue;
     }
+
+/* stop strncpy trunaction warning, this usage is actually what we want */
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
 
     if (order <= MAXDIM_GPU)
     {
