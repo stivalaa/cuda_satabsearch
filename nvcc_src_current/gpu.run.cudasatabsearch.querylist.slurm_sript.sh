@@ -27,7 +27,7 @@ TLOCSD=./cudaSaTabsearch
 
 # the (compressed) tableauxdistmatrixdb-sel-gs-bib-95-1.75.sorted.ascii file 
 # can be downloaded from
-# http://munk.csse.unimelb.edu.au/~astivala/satabsearch/tableauxdistmatrixdb-sel-gs-bib-95-1.75.sorted.ascii.gz
+# http://munk.cis.unimelb.edu.au/~astivala/satabsearch/tableauxdistmatrixdb-sel-gs-bib-95-1.75.sorted.ascii.gz
 # (then uncompress with gunzip)
 tlocsdopts="-q ${HOME}/tableauxdistmatrixdb-sel-gs-bib-95-1.75.sorted.ascii -r8192"
 
