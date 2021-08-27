@@ -891,7 +891,7 @@ void sa_tabsearch_host
   float temp;
   float randnum;
   int startj,endj,k,oldj,newj;
-  unsigned int ssei;
+  int ssei;
   char *tab1;
   char *tab2;
   char *dmat1; // we use char* not float* to do pitched pointer arithmetic
@@ -1040,7 +1040,7 @@ void sa_tabsearch_host
 #else
         randnum = drand48();
 #endif
-        ssei = (unsigned int)((randnum - EPS) * n1);
+        ssei = ((randnum - EPS) * n1);
 
 #if defined (DEBUG) && !defined(CUDA)
 //        fprintf(stderr, "xxx %f %d\n", randnum, ssei);
