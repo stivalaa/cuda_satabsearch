@@ -4,8 +4,6 @@
  * Author:  Alex Stivala
  * Created: January 2010
  *
- * $Id: cudaSaTabsearch.cu 4753 2013-11-20 03:16:27Z astivala $
- *
  * CUDA host code for simulated annealing tableau matching (discrete).
  * This is a CUDA implemenation of the FORTRAN subroutine TSAMTD.
  * Since the GPU has limited memory (and specifically, very limited
