@@ -685,6 +685,7 @@ int main(int argc, char *argv[])
       fprintf(stderr, "ERROR: no query structures found on stdin\n");
       exit(1);
     }
+    fprintf(stderr, "Read %d query structures\n", num_queries);
   }
 
   if (!ltype)
