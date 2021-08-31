@@ -12,3 +12,5 @@ qlist_gpu_cudaSaTabsearch-*.out
 tags
 multiquery_gpu_cudaSaTabsearch-*.out
 multiquery_gpu_cudaSaTabsearch-*.err
+multirun_gpu_cudaSaTabsearch-*.out
+multirun_gpu_cudaSaTabsearch-*.err
