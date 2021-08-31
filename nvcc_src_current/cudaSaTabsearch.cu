@@ -576,6 +576,8 @@ int main(int argc, char *argv[])
 //  int num_threads = 0;
   int exit_status = 0;
   char buf[MAX_LINE_LEN];
+  char qtab[MAXDIM*MAXDIM];
+  float qdmat[MAXDIM*MAXDIM];
   int qn;
   char qid[LABELSIZE+1];
   int ltype=0,lorder=0,lsoln=0;
@@ -972,11 +974,10 @@ int main(int argc, char *argv[])
       }
       if (use_shared_memory) {
         get_device_constant_addresses(&const_addr);
-        copyQueryToConstantMemory(qi, 
-                                  querydbmode ? 0 : query_orders[qi], 
-                                  querydbmode ? NULL : query_tableaux+qi*MAXDIM*MAXDIM,
-                                  querydbmode ? NULL : query_distmatrices+qi*MAXDIM*MAXDIM,
-                                  querydbmode ? NULL : qssetypes,
+        copyQueryToConstantMemory(qi, qn,
+                                  querydbmode ? qtab : query_tableaux+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? qdmat : query_distmatrices+qi*MAXDIM*MAXDIM,
+                                  qssetypes,
                                   qid,
                                   const_addr.c_qn_addr, const_addr.c_qtab_addr,
                                   const_addr.c_qdmat_addr,
@@ -987,11 +988,10 @@ int main(int argc, char *argv[])
       }
       else {
         get_device_constant_addresses_noshared_small(&const_addr);    
-        copyQueryToConstantMemory(qi,
-                                  querydbmode ? 0 : query_orders[qi], 
-                                  querydbmode ? NULL : query_tableaux+qi*MAXDIM*MAXDIM,
-                                  querydbmode ? NULL : query_distmatrices+qi*MAXDIM*MAXDIM,
-                                  querydbmode ? NULL : qssetypes,
+        copyQueryToConstantMemory(qi, qn,
+                                  querydbmode ? qtab : query_tableaux+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? qdmat : query_distmatrices+qi*MAXDIM*MAXDIM,
+                                  qssetypes,
                                   qid,
                                   const_addr.c_qn_noshared_small_addr,
                                   const_addr.c_qtab_noshared_small_addr, 
@@ -1172,11 +1172,10 @@ int main(int argc, char *argv[])
       for (int qi = 0; qi < num_queries; qi++)
       {
         get_device_constant_addresses_noshared(&const_addr);    
-        copyQueryToConstantMemory(qi,
-                                  querydbmode ? 0 : query_orders[qi], 
-                                  querydbmode ? NULL : query_tableaux+qi*MAXDIM*MAXDIM,
-                                  querydbmode ? NULL : query_distmatrices+qi*MAXDIM*MAXDIM,
-                                  querydbmode ? NULL : qssetypes,
+        copyQueryToConstantMemory(qi, qn,
+                                  querydbmode ? qtab : query_tableaux+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? qdmat : query_distmatrices+qi*MAXDIM*MAXDIM,
+                                  qssetypes,
                                   qid,
                                   const_addr.c_qn_noshared_addr,
                                   const_addr.c_qtab_noshared_addr, 
