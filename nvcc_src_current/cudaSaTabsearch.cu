@@ -155,6 +155,15 @@ typedef struct dbIndex_s
                     tableaux and distmatrix db list if large is true */
 } dbIndex_t;
 
+/* queryData_t is a struct containing the data for a single query structure */
+typedef struct queryData_s {
+    char qtab[MAXDIM*MAXDIM];     /* the query tableau */
+    float qdmat[MAXDIM*MAXDIM];   /* the query distmatrix*/
+    char qid[LABELSIZE+1];        /* the query identifier*/
+    int qn;                       /* the query order */
+    char *qssetypes;              /* the query SSE types*/
+} queryData_t;
+
 /* searchParams_t is a struct for parameter to tableau search functions
    dcelared as CUT_THREADROUTINE to be callable as threads */
 typedef struct searchParams_s
@@ -165,11 +174,7 @@ typedef struct searchParams_s
     int num_queries;        /* number of queries; 0 if not query list mode */
     int single_query_qid; /* if >=0, do only the one at this index */
     dbIndex_t *query_dbindex_list; /* if num_queries>0, the query db index */
-    char qtab[MAXDIM*MAXDIM];     /* if num_queries==0, the query tableau */
-    float qdmat[MAXDIM*MAXDIM];   /*                    the query distmatrix*/
-    char qid[LABELSIZE+1];        /*                    the query identifier*/
-    int qn;                       /*                    the query order */
-    char *qssetypes;              /*                    the query SSE types*/
+    queryData_t query_structure;   /* if num_queries==0, the query structure */
 
     unsigned long dbsize;             /* number of entries in the db */
     char *tableaux;         /* the tableaux database */
@@ -358,11 +363,11 @@ static CUT_THREADPROC tabsearch_host_thread(searchParams_t *params)
     }
     else
     {
-      strncpy(qid, params->qid, LABELSIZE);
-      c_qn_host = params->qn;
-      memcpy(c_qtab_host, params->qtab, sizeof(c_qtab_host));
-      memcpy(c_qdmat_host, params->qdmat, sizeof(c_qdmat_host));
-      memcpy(c_qssetypes_host, params->qssetypes, sizeof(c_qssetypes_host));
+      strncpy(qid, params->query_structure.qid, LABELSIZE);
+      c_qn_host = params->query_structure.qn;
+      memcpy(c_qtab_host, params->query_structure.qtab, sizeof(c_qtab_host));
+      memcpy(c_qdmat_host, params->query_structure.qdmat, sizeof(c_qdmat_host));
+      memcpy(c_qssetypes_host, params->query_structure.qssetypes, sizeof(c_qssetypes_host));
     }
     
     printf("# cudaSaTabsearch LTYPE = %c LORDER = %c LSOLN = %c\n",
@@ -395,7 +400,7 @@ static CUT_THREADPROC tabsearch_host_thread(searchParams_t *params)
     for (i = 0; i < params->dbsize; i++)
     {
 /*      printf("%-8s  %d\n", params->names+i*(LABELSIZE+1), scores[i]); */
-      norm2score = norm2(scores[i], params->qn, params->orders[i]);
+      norm2score = norm2(scores[i], params->query_structure.qn, params->orders[i]);
       zscore = z_gumbel(norm2score, gumbel_a, gumbel_b);
       pvalue = pv_gumbel(zscore);
       printf("%-8s %d %g %g %g\n", params->names+i*(LABELSIZE+1),
@@ -959,11 +964,11 @@ int main(int argc, char *argv[])
       host_params.num_queries = num_queries;
       host_params.query_dbindex_list = query_dbindex_list;
       host_params.single_query_qid = qi; 
-      memcpy(host_params.qtab, qtab, sizeof(qtab));
-      memcpy(host_params.qdmat, qdmat, sizeof(qdmat));
-      memcpy(host_params.qid, qid, sizeof(qid));
-      host_params.qn = qn;
-      host_params.qssetypes = qssetypes;
+      memcpy(host_params.query_structure.qtab, qtab, sizeof(qtab));
+      memcpy(host_params.query_structure.qdmat, qdmat, sizeof(qdmat));
+      memcpy(host_params.query_structure.qid, qid, sizeof(qid));
+      host_params.query_structure.qn = qn;
+      host_params.query_structure.qssetypes = qssetypes;
       host_params.maxdim = MAXDIM;
       host_params.dbsize = large_dbsize;
       host_params.tableaux = large_tableaux;
@@ -1221,11 +1226,11 @@ int main(int argc, char *argv[])
     host_params.single_query_qid = -1;
     host_params.query_dbindex_list = query_dbindex_list;
 
-    memcpy(host_params.qtab, qtab, sizeof(qtab));
-    memcpy(host_params.qdmat, qdmat, sizeof(qdmat));
-    memcpy(host_params.qid, qid, sizeof(qid));
-    host_params.qn = qn;
-    host_params.qssetypes = qssetypes;
+    memcpy(host_params.query_structure.qtab, qtab, sizeof(qtab));
+    memcpy(host_params.query_structure.qdmat, qdmat, sizeof(qdmat));
+    memcpy(host_params.query_structure.qid, qid, sizeof(qid));
+    host_params.query_structure.qn = qn;
+    host_params.query_structure.qssetypes = qssetypes;
     host_params.maxdim = MAXDIM_GPU;
     host_params.dbsize = gpu_dbsize;
 
