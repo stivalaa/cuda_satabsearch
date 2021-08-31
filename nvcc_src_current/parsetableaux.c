@@ -500,3 +500,129 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
   *num_large_read = large_num_read;
   return num_read + large_num_read;
 }
+
+/*
+ * Read the entire list of query structures (tableaux+distmatrix)
+ * from file into memory,
+ *
+ * Parameters:
+ *    fp - open FILE* of database file
+ *    tableaux - (out) all tableaux, allocated here
+ *    distmatrices - (out) all distmatrices, allocated here
+ *    orders - (out) order of tableaux&distmatrix, allocated here
+ *    names - (out) name of each structure, allocated here
+ *
+ * Return value: total number of tableaux+distmatrices read, -ve on error.
+ *               this is large_num_read + num_read
+ *
+ */
+int read_queries(FILE *fp, char **tableaux, float **distmatrices, 
+                 int **orders, char **names)
+{
+  const int INITIAL_NUM = 1000; /* allocate this many to begin with */
+  char *curtab;
+  float *curdmat;
+  int *curord;
+  char *curname;
+  int num_read = 0;
+  char loctab[MAXDIM*MAXDIM];
+  float locdmat[MAXDIM*MAXDIM];
+  int num_skipped = 0;
+  int order,read_order;
+  char name[LABELSIZE+1];
+  
+
+  if (!(*tableaux = (char *)malloc(INITIAL_NUM*MAXDIM*MAXDIM*sizeof(char)))) 
+  {
+    fprintf(stderr, "malloc tableaux failed\n");
+    exit(1);
+  }
+  if (!(*distmatrices = (float *)malloc(INITIAL_NUM*MAXDIM*MAXDIM*sizeof(float))))
+  {
+    fprintf(stderr, "malloc distmatrices failed\n");
+    exit(1);
+  }
+  if (!(*orders = (int *)malloc(INITIAL_NUM*sizeof(int))))
+  {
+    fprintf(stderr, "malloc orders failed\n");
+    exit(1);
+  }
+  if (!(*names = (char *)malloc(INITIAL_NUM*(LABELSIZE+1)*sizeof(char))))
+  {
+    fprintf(stderr, "malloc names failed\n");
+    exit(1);
+  }
+  curname = *names;
+  curord = *orders;
+  curtab = *tableaux;
+  curdmat = *distmatrices;
+
+
+  while (!feof(fp))
+  {
+    if (fscanf(fp, "%8s %d\n", name, &order) != 2)
+      break; /* normal for reading past last entry in db, detects EOF */
+    
+    if (order <= MAXDIM && num_read >= INITIAL_NUM)
+    {
+      /* past the initial allocation, realloc for this one */
+      if (!(*tableaux = (char *)realloc(*tableaux, (num_read+1) * MAXDIM*MAXDIM*sizeof(char)))) 
+      {
+        fprintf(stderr, "realloc tableaux failed\n");
+        exit(1);
+      }
+      curtab = *tableaux + num_read * MAXDIM*MAXDIM;
+      if (!(*distmatrices = (float *)realloc(*distmatrices, (num_read+1) * MAXDIM*MAXDIM*sizeof(float))))
+      {
+        fprintf(stderr, "realloc distmatrices failed\n");
+        exit(1);
+      }
+      curdmat = *distmatrices + num_read * MAXDIM*MAXDIM;
+      if (!(*orders = (int *)realloc(*orders, (num_read+1)*sizeof(int))))
+      {
+        fprintf(stderr, "realloc orders failed\n");
+        exit(1);
+      }
+      curord = *orders + num_read;
+      if (!(*names = (char *)realloc(*names, (num_read+1)*(LABELSIZE+1)*sizeof(char))))
+      {
+        fprintf(stderr, "realloc names failed\n");
+        exit(1);
+      }
+      curname = *names + num_read * (LABELSIZE+1);
+    }
+
+    
+    read_order = parse_tableau(fp, MAXDIM, order, loctab);
+
+    if (read_order < -1)  /* tableau too large*/
+    {
+      parse_distmatrix(fp,  MAXDIM,
+                       -(*curord), NULL, 1); /* read+discard the distmatrix */
+      num_skipped++;
+      continue;
+    }
+
+/* stop strncpy trunaction warning, this usage is actually what we want */
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+
+    strncpy(curname, name, LABELSIZE);
+    *curord = order;
+    memcpy(curtab, &loctab, sizeof(loctab));
+    parse_distmatrix(fp, MAXDIM, read_order, locdmat, 0);
+    memcpy(curdmat, &locdmat, sizeof(locdmat));
+    curname += (LABELSIZE+1);
+    curord++;
+    curtab += MAXDIM*MAXDIM;
+    curdmat += MAXDIM*MAXDIM;
+    num_read++;
+  }
+
+  if (num_skipped > 0) 
+  {
+    fprintf(stderr, "WARNING: skipped %d query tableaux of order > %d\n",
+            num_skipped, MAXDIM);
+  }
+
+  return num_read;
+}

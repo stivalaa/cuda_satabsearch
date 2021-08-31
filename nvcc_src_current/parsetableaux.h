@@ -33,4 +33,9 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
                   int **orders, char **names,
                   int **large_orders, char **large_names,
                   int *num_large_read);
+
+/* read query structures into memory */
+int read_queries(FILE *fp, char **tableaux, float **distmatrices, 
+                 int **orders, char **names);
+
 #endif /* PARSETABLEAUX_H */
