@@ -201,12 +201,16 @@ typedef struct searchParams_s
     int ltype; int lorder; int lsoln; /* type,order,soln flags */
     unsigned long maxstart;           /* number of restarts */
     unsigned long maxdim;             /*dimension of tableaux, distmatrices here */
-    int num_queries;        /* number of queries; 0 if not query list mode */
+    int num_queries;        /* number of queries */
     int single_query_qid; /* if >=0, do only the one at this index */
-    dbIndex_t *query_dbindex_list; /* if num_queries>0, the query db index */
-    queryData_t query_structure;   /* if num_queries==0, the query structure */
+    dbIndex_t *query_dbindex_list; /* the query db index (query list mode) */
+                                   /* OR query data (notq query list mode) : */
+    char  *q_tableaux;                     /* query tableaux */
+    float *q_distmatrices;                 /* query distance matrices */
+    int   *q_orders;                       /* sizes of query tableaux */
+    char  *q_names;                        /* names of queries */
 
-    unsigned long dbsize;             /* number of entries in the db */
+    unsigned long dbsize;   /* number of entries in the db */
     char *tableaux;         /* the tableaux database */
     float *distmatrices;    /* the distance matrices database */
     int   *orders;          /* orders of entries in db */
@@ -317,8 +321,9 @@ static CUT_THREADPROC tabsearch_host_thread(searchParams_t *params)
   char qid[LABELSIZE+1];
   int *scores;
   double norm2score,zscore,pvalue;
+  char qssetypes[MAXDIM];
 
-  int query_count = (params->num_queries == 0 || params->single_query_qid >= 0
+  int query_count = (params->query_dbindex_list && params->single_query_qid >= 0
                      ? 1 : params->num_queries);
 
   cudaExtent tableaux_extent = {params->maxdim, params->maxdim,
@@ -397,11 +402,14 @@ static CUT_THREADPROC tabsearch_host_thread(searchParams_t *params)
     }
     else
     {
-      strncpy(qid, params->query_structure.qid, LABELSIZE);
-      c_qn_host = params->query_structure.qn;
-      memcpy(c_qtab_host, params->query_structure.qtab, sizeof(c_qtab_host));
-      memcpy(c_qdmat_host, params->query_structure.qdmat, sizeof(c_qdmat_host));
-      memcpy(c_qssetypes_host, params->query_structure.qssetypes, sizeof(c_qssetypes_host));
+      strncpy(qid, params->q_names+qi*(LABELSIZE+1), LABELSIZE);
+      c_qn_host = params->q_orders[qi];
+      memcpy(c_qtab_host, params->q_tableaux+qi*MAXDIM*MAXDIM, sizeof(c_qtab_host));
+      memcpy(c_qdmat_host, params->q_distmatrices+qi*MAXDIM*MAXDIM, sizeof(c_qdmat_host));
+      // set the qssetypes vector as main diagonal of the query tableau
+      for (i = 0; i < params->q_orders[qi]; i++)
+        qssetypes[i] = (params->q_tableaux+qi*MAXDIM*MAXDIM)[INDEX2D(i,i,MAXDIM,MAXDIM)];
+      memcpy(c_qssetypes_host, qssetypes, sizeof(c_qssetypes_host));
     }
     
     printf("# cudaSaTabsearch LTYPE = %c LORDER = %c LSOLN = %c\n",
@@ -434,7 +442,7 @@ static CUT_THREADPROC tabsearch_host_thread(searchParams_t *params)
     for (i = 0; i < params->dbsize; i++)
     {
 /*      printf("%-8s  %d\n", params->names+i*(LABELSIZE+1), scores[i]); */
-      norm2score = norm2(scores[i], params->query_structure.qn, params->orders[i]);
+      norm2score = norm2(scores[i], c_qn_host, params->orders[i]);
       zscore = z_gumbel(norm2score, gumbel_a, gumbel_b);
       pvalue = pv_gumbel(zscore);
       printf("%-8s %d %g %g %g\n", params->names+i*(LABELSIZE+1),
@@ -1249,12 +1257,10 @@ int main(int argc, char *argv[])
     host_params.num_queries = num_queries;
     host_params.single_query_qid = -1;
     host_params.query_dbindex_list = query_dbindex_list;
-
-    memcpy(host_params.query_structure.qtab, qtab, sizeof(qtab));
-    memcpy(host_params.query_structure.qdmat, qdmat, sizeof(qdmat));
-    memcpy(host_params.query_structure.qid, qid, sizeof(qid));
-    host_params.query_structure.qn = qn;
-    host_params.query_structure.qssetypes = qssetypes;
+    host_params.q_tableaux = query_tableaux;
+    host_params.q_distmatrices = query_distmatrices;
+    host_params.q_orders = query_orders;
+    host_params.q_names = query_names;
     host_params.maxdim = MAXDIM_GPU;
     host_params.dbsize = gpu_dbsize;
 
