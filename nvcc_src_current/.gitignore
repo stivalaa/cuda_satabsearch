@@ -10,3 +10,5 @@ host_qlist_cudaSaTabsearch-*.out
 qlist_gpu_cudaSaTabsearch-*.err
 qlist_gpu_cudaSaTabsearch-*.out
 tags
+multiquery_gpu_cudaSaTabsearch-*.out
+multiquery_gpu_cudaSaTabsearch-*.err
