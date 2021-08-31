@@ -14,7 +14,7 @@
 
 #SBATCH --job-name="qlist_gpu_cudaSaTabsearch"
 #SBATCH --time=0-01:00:00
-#SBATCH --partition=gpu
+#SBATCH --partition=debug-gpu
 #SBATCH --output=qlist_gpu_cudaSaTabsearch-%j.out
 #SBATCH --error=qlist_gpu_cudaSaTabsearch-%j.err
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name="gpu_cudaSaTabsearch"
 #SBATCH --time=0-00:00:20
-#SBATCH --partition=gpu
+#SBATCH --partition=debug-gpu
 #SBATCH --output=gpu_cudaSaTabsearch-%j.out
 #SBATCH --error=gpu_cudaSaTabsearch-%j.err
 
