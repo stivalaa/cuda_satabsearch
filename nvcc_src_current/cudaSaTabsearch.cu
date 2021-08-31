@@ -234,6 +234,10 @@ static dbIndex_t *query_dbindex_list = NULL; /* and their indices in db */
 
 static int maxstart = DEFAULT_MAXSTART; /* number of restarts */
 
+static char *query_tableaux;       /* query tableaux */
+static float *query_distmatrices;; /* query dist.matrices*/
+static int *query_orders;          /* query orders */
+static char *query_names;          /* query names */
 
 
 
@@ -564,8 +568,6 @@ int main(int argc, char *argv[])
 //  int num_threads = 0;
   int exit_status = 0;
   char buf[MAX_LINE_LEN];
-  char qtab[MAXDIM*MAXDIM];
-  float qdmat[MAXDIM*MAXDIM];
   int qn;
   char qid[LABELSIZE+1];
   int ltype=0,lorder=0,lsoln=0;
@@ -647,7 +649,7 @@ int main(int argc, char *argv[])
       num_queries++;
     }
   }
-  else
+  else /* not querydbmode: read query tableaux+distmatrices on stdin */
   {
     if (fscanf(stdin, "%s\n", dbfile) != 1)
     {
@@ -666,19 +668,13 @@ int main(int argc, char *argv[])
     if (clsoln == 'T')
       lsoln = 1;
     
-    if (fscanf(stdin, "%8s %d\n", qid, &qn) != 2)
-    {
-      fprintf(stderr, "ERROR parsing query tableau header from stdin\n");
+    num_queries = read_queries(stdin, &query_tableaux, &query_distmatrices,
+                               &query_orders, &query_names);
+    if (num_queries < 0) {
+      fprintf(stderr, "ERROR loading query structures from stdin\n");
       exit(1);
-    }
-    if (parse_tableau(stdin, MAXDIM, qn, qtab) < 0)
-    {
-      fprintf(stderr, "ERROR parsing query tableau from stdin\n");
-      exit(1);
-    }
-    if (parse_distmatrix(stdin, MAXDIM, qn, qdmat, 0) < 0)
-    {
-      fprintf(stderr, "ERROR parsing query distance matrix from stdin\n");
+    } else if (num_queries == 0) {
+      fprintf(stderr, "ERROR: no query structures found on stdin\n");
       exit(1);
     }
   }
@@ -774,11 +770,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    num_queries = 0; 
     query_dbindex_list = NULL;
-    // set the qssetypes vector as main diagonal of the query tableau
-    for (i = 0; i < qn; i++)
-      qssetypes[i] = qtab[INDEX2D(i,i,MAXDIM,MAXDIM)];
   }
     
   /* TODO allow multiple GPUs (need one thread for each) */
@@ -957,12 +949,26 @@ int main(int argc, char *argv[])
     }
 
     const_addr_t const_addr;
-    int query_count = (num_queries == 0 ? 1 : num_queries);
-    for (int qi = 0; qi < query_count; qi++)
+    for (int qi = 0; qi < num_queries; qi++)
     {
+      if (!querydbmode) {
+      strncpy(qid,  query_names+qi*(LABELSIZE+1), LABELSIZE);
+      qn = query_orders[qi];
+      // set the qssetypes vector as main diagonal of the query tableau
+      for (i = 0; i < query_orders[qi]; i++)
+        qssetypes[i] = (query_tableaux+qi*MAXDIM*MAXDIM)[INDEX2D(i,i,MAXDIM,MAXDIM)];
+
+      } else {
+        qn = orders[qi];
+      }
       if (use_shared_memory) {
         get_device_constant_addresses(&const_addr);
-        copyQueryToConstantMemory(qi, qn, qtab, qdmat, qssetypes, qid,
+        copyQueryToConstantMemory(qi, 
+                                  querydbmode ? 0 : query_orders[qi], 
+                                  querydbmode ? NULL : query_tableaux+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? NULL : query_distmatrices+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? NULL : qssetypes,
+                                  qid,
                                   const_addr.c_qn_addr, const_addr.c_qtab_addr,
                                   const_addr.c_qdmat_addr,
                                   const_addr.c_qssetypes_addr);
@@ -972,7 +978,12 @@ int main(int argc, char *argv[])
       }
       else {
         get_device_constant_addresses_noshared_small(&const_addr);    
-        copyQueryToConstantMemory(qi, qn, qtab, qdmat, qssetypes, qid,
+        copyQueryToConstantMemory(qi,
+                                  querydbmode ? 0 : query_orders[qi], 
+                                  querydbmode ? NULL : query_tableaux+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? NULL : query_distmatrices+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? NULL : qssetypes,
+                                  qid,
                                   const_addr.c_qn_noshared_small_addr,
                                   const_addr.c_qtab_noshared_small_addr, 
                                   const_addr.c_qdmat_noshared_small_addr, 
@@ -986,30 +997,6 @@ int main(int argc, char *argv[])
       printf("# DBFILE = %-80s\n", dbfile);
 
 
-      /* launch thread to do large db structs on host */
-      searchParams_t host_params;
-      host_params.ltype = ltype;
-      host_params.lorder = lorder;
-      host_params.lsoln = lsoln;
-      host_params.maxstart = maxstart;
-      host_params.num_queries = num_queries;
-      host_params.query_dbindex_list = query_dbindex_list;
-      host_params.single_query_qid = qi; 
-      memcpy(host_params.query_structure.qtab, qtab, sizeof(qtab));
-      memcpy(host_params.query_structure.qdmat, qdmat, sizeof(qdmat));
-      memcpy(host_params.query_structure.qid, qid, sizeof(qid));
-      host_params.query_structure.qn = qn;
-      host_params.query_structure.qssetypes = qssetypes;
-      host_params.maxdim = MAXDIM;
-      host_params.dbsize = large_dbsize;
-      host_params.tableaux = large_tableaux;
-      host_params.distmatrices = large_distmatrices;
-      host_params.orders = large_orders;
-      host_params.names = large_names;
-
-//XXX      threadID[num_threads++] = cutStartThread((CUT_THREADROUTINE)tabsearch_host_thread, &host_params);
- 
-
       fprintf(stderr, "Executing simulated annealing tableaux match kernel (%sshared memory) on GPU for qid %s...\n", use_shared_memory ? " " : "no ", qid);
       checkCudaErrors( cudaDeviceSynchronize() );
 
@@ -1018,6 +1005,7 @@ int main(int argc, char *argv[])
       if (use_shared_memory)
       {
         int xxx_qn=-1; checkCudaErrors( cudaMemcpy(&xxx_qn, const_addr.c_qn_addr, sizeof(qn), cudaMemcpyDeviceToHost) ); fprintf(stderr,"xxx_qn=%d\n",xxx_qn); //XXX
+
         sa_tabsearch_gpu<<<dimGrid,dimBlock>>>(gpu_dbsize,
                                                lorder, 
                                                lsoln,
@@ -1172,11 +1160,16 @@ int main(int argc, char *argv[])
         }
       }
 
-      for (int qi = 0; qi < query_count; qi++)
+      for (int qi = 0; qi < num_queries; qi++)
       {
         get_device_constant_addresses_noshared(&const_addr);    
-        copyQueryToConstantMemory(qi, qn, qtab, qdmat, qssetypes, qid,
-                                 const_addr.c_qn_noshared_addr,
+        copyQueryToConstantMemory(qi,
+                                  querydbmode ? 0 : query_orders[qi], 
+                                  querydbmode ? NULL : query_tableaux+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? NULL : query_distmatrices+qi*MAXDIM*MAXDIM,
+                                  querydbmode ? NULL : qssetypes,
+                                  qid,
+                                  const_addr.c_qn_noshared_addr,
                                   const_addr.c_qtab_noshared_addr, 
                                   const_addr.c_qdmat_noshared_addr,
                                   const_addr.c_qssetypes_noshared_addr);

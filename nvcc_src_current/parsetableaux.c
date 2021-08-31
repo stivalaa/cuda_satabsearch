@@ -513,7 +513,6 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
  *    names - (out) name of each structure, allocated here
  *
  * Return value: total number of tableaux+distmatrices read, -ve on error.
- *               this is large_num_read + num_read
  *
  */
 int read_queries(FILE *fp, char **tableaux, float **distmatrices, 
