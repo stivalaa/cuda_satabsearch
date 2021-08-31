@@ -798,7 +798,7 @@ int main(int argc, char *argv[])
     */
 
     int devnum, deviceCount, gflops,max_gflops=0, sel_devnum;
-    cudaGetDeviceCount(&deviceCount);
+    checkCudaErrors( cudaGetDeviceCount(&deviceCount) );
     if (deviceCount == 0)
     {
       fprintf(stderr, "There is no device supporting CUDA.\n");
