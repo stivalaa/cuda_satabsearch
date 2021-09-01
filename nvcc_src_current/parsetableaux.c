@@ -183,13 +183,14 @@ static char encode_tabcode(char tabcode[2])
  *      fp - filehandle to read from
  *      dim  - max dimension  allowed (tab must be allocated this size)
  *      n    - order of tableau to read
+ *      name - name for error messages only
  *      tab  - (OUT) full 2d tableaux  (allocated by caller as dim*dim chars)
  *
  * Return value:
  *      Order of tableau read, or
  *      -n (n>1) tableau order n is too large to read
  */
-int parse_tableau(FILE *fp, size_t dim, int n, char *tab)
+int parse_tableau(FILE *fp, size_t dim, int n, const char *name, char *tab)
 {
   char buf[MAX_LINE_LEN];
   char tabcode[2];
@@ -200,7 +201,8 @@ int parse_tableau(FILE *fp, size_t dim, int n, char *tab)
   order = n;
   if (n > (int)dim)
   {
-    fprintf(stderr, "Tableau order %d is too large\n", n);
+    fprintf(stderr, "Tableau %s order %d is too large (max is %d)\n", 
+            name, n, (int)dim);
     order = -n;
     toolarge = 1;
   }
@@ -448,9 +450,9 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
 
     
     if (order <= MAXDIM_GPU)
-      read_order = parse_tableau(fp, MAXDIM_GPU, order, loctab);
+      read_order = parse_tableau(fp, MAXDIM_GPU, order, name, loctab);
     else
-      read_order = parse_tableau(fp, MAXDIM, order, large_loctab);
+      read_order = parse_tableau(fp, MAXDIM, order, name, large_loctab);
 
     if (read_order < -1)  /* tableau too large*/
     {
@@ -592,7 +594,7 @@ int read_queries(FILE *fp, char **tableaux, float **distmatrices,
     }
 
     
-    read_order = parse_tableau(fp, MAXDIM, order, loctab);
+    read_order = parse_tableau(fp, MAXDIM, order, name, loctab);
 
     if (read_order < -1)  /* tableau too large*/
     {

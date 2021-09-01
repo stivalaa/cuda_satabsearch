@@ -22,7 +22,7 @@
 #define INDEX2D(i,j,m,n) ( ((i)*(n) + (j)) )
 
 /* parse a 2-char encoded tableau */
-int parse_tableau(FILE *fp, size_t dim, int n, char *tab);
+int parse_tableau(FILE *fp, size_t dim, int n, const char *name, char *tab);
 
 /* parse distance matrix */
 int parse_distmatrix(FILE *fp, size_t dim, int n, float *dmat, int discard);
