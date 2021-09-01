@@ -9,7 +9,7 @@
 #
 
 #SBATCH --job-name="multiquery_host_cudaSaTabsearch"
-#SBATCH --time=0-20:00:00
+#SBATCH --time=0-02:00:00
 #SBATCH --partition=slim
 #SBATCH --output=multiquery_host_cudaSaTabsearch-%j.out
 #SBATCH --error=multiquery_host_cudaSaTabsearch-%j.err
