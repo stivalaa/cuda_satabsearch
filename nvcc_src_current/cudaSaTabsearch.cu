@@ -625,6 +625,9 @@ int main(int argc, char *argv[])
     }
   }
 
+  fprintf(stderr, "MAXDIM = %d (edit in saparams.h and recompile to change)\n",
+          MAXDIM);
+
   if (querydbmode)
   {
     cltype = 'T'; ltype = 1;
