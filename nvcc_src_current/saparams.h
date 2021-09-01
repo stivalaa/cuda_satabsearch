@@ -12,7 +12,7 @@
  *****************************************************************************/
 
 /* maximum size of tableaux / distance matrices that can be read */
-#define MAXDIM 97
+#define MAXDIM 111
 
 /* maximum size of tableaux / distance matrices handled by GPU (shared mem) */
 #define MAXDIM_GPU 96  /* TODO conditional compilation for this */
