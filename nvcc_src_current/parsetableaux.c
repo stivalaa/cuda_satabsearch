@@ -455,7 +455,7 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
     if (read_order < -1)  /* tableau too large*/
     {
       parse_distmatrix(fp, order <= MAXDIM_GPU ? MAXDIM_GPU : MAXDIM,
-                       -(*curord), NULL, 1); /* read+discard the distmatrix */
+                       -(read_order), NULL, 1); /* read+discard the distmatrix */
       num_skipped++;
       continue;
     }
@@ -597,7 +597,7 @@ int read_queries(FILE *fp, char **tableaux, float **distmatrices,
     if (read_order < -1)  /* tableau too large*/
     {
       parse_distmatrix(fp,  MAXDIM,
-                       -(*curord), NULL, 1); /* read+discard the distmatrix */
+                       -(read_order), NULL, 1); /* read+discard the distmatrix */
       num_skipped++;
       continue;
     }
