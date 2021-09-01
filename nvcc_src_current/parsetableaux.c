@@ -456,6 +456,8 @@ int read_database(FILE *fp, char **tableaux, float **distmatrices,
 
     if (read_order < -1)  /* tableau too large*/
     {
+      fprintf(stderr, "WARNING: excluded database structure %s as it is too large\n",
+              name);
       parse_distmatrix(fp, order <= MAXDIM_GPU ? MAXDIM_GPU : MAXDIM,
                        -(read_order), NULL, 1); /* read+discard the distmatrix */
       num_skipped++;
@@ -598,6 +600,7 @@ int read_queries(FILE *fp, char **tableaux, float **distmatrices,
 
     if (read_order < -1)  /* tableau too large*/
     {
+      fprintf(stderr, "WARNING: excluded query structure %s as it is too large\n", name);
       parse_distmatrix(fp,  MAXDIM,
                        -(read_order), NULL, 1); /* read+discard the distmatrix */
       num_skipped++;
