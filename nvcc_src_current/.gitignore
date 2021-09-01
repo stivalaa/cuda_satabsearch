@@ -14,3 +14,5 @@ multiquery_gpu_cudaSaTabsearch-*.out
 multiquery_gpu_cudaSaTabsearch-*.err
 multirun_gpu_cudaSaTabsearch-*.out
 multirun_gpu_cudaSaTabsearch-*.err
+multiquery_host_cudaSaTabsearch-*.out
+multiquery_host_cudaSaTabsearch-*.err
