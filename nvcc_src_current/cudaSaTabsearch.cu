@@ -838,6 +838,27 @@ int main(int argc, char *argv[])
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, sel_devnum);
     fprintf(stderr, "%s\n", deviceProp.name);
+    fprintf(stderr, "totalGlobalMem              = %g GB\n"
+                    "sharedMemPerBlock           = %g KB\n"
+                    "warpSize                    = %d\n"
+                    "maxThreadsPerBlock          = %d\n"
+                    "clockRate                   = %g MHz\n"
+                    "totalConstMem               = %g KB\n"
+                    "multiProcessorCount         = %d\n"
+                    "maxThreadsPerMultiProcessor = %d\n"
+                    "sharedMeMPerMultiprocessor  = %d KB\n"
+                    "maxBlocksPerMultiProcessor  = %d\n",
+            (double)deviceProp.totalGlobalMem / (1024*1024*1024),
+            (double)deviceProp.sharedMemPerBlock / 1024,
+            deviceProp.warpSize,
+            deviceProp.maxThreadsPerBlock,
+            (double)deviceProp.clockRate / 1000,
+            (double)deviceProp.totalConstMem / 1024,
+            deviceProp.multiProcessorCount,
+            deviceProp.maxThreadsPerMultiProcessor,
+            (double)deviceProp.sharedMemPerMultiprocessor / 1024,
+            deviceProp.maxBlocksPerMultiProcessor);
+
     cudaSetDevice( sel_devnum );
   }
 
