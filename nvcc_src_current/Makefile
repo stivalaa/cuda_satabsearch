@@ -22,7 +22,8 @@
 
 
 # Requires the CUDA SDK 
-CUDA_INCLUDE = /apps/cudatoolkit/10.2/include
+CUDA_ROOT    = /apps/cudatoolkit/10.2
+CUDA_INCLUDE = $(CUDA_ROOT)/include
 CUDA_SDK_ROOT = /apps/cudatoolkit/10.2/samples
 CUDA_SDK_INCLUDE = $(CUDA_SDK_ROOT)/common/inc
 
@@ -76,7 +77,7 @@ LDFLAGS    =
 #LDFLAGS    = -arch $(GPU_ARCH)
 LDLIBS     = -lm
 
-MAKEDEPEND = gcc -MM  $(CPPFLAGS)
+MAKEDEPEND = nvcc -MM
 DEPENDFILE = .depend
 
 # Program to build TAGS file for EMACS
@@ -115,8 +116,9 @@ cudaSaTabsearch_kernel_noshared_small.o : cudaSaTabsearch_kernel.cu
 	#$(NVCC) -c $(NVCFLAGS) $(CUDA_CPPFLAGS) -DCUDA -DSMALL_MAXDIM -arch $(GPU_ARCH) -o $@ $<
 
 
-depend: $(SRCS) $(HDRS)
-	$(MAKEDEPEND) $(SRCS) $(HDRS) > $(DEPENDFILE)
+depend: $(SRCS) 
+        # note dodgy filtering out of CUDA SDK dirs in depend
+	$(MAKEDEPEND) $(CUDA_CPPFLAGS) $(SRCS) | grep -v cudatoolkit > $(DEPENDFILE)
 
 # make the TAGS file for EMACS
 tags:
