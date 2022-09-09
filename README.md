@@ -198,7 +198,7 @@ PD PE OT LS LE RT RT LE OT PE OT OT e
 16.856  5.985 12.706 27.454 15.011 16.146 19.829 22.156 17.744 13.079  9.541 12.996  0.000
  ```
 
-See `*.input` and `*.sh` files for  more examples, and README_example_usage.txt for worked example of building database and query, and running the query against the database.
+See `*.input` and `*.sh` files for  more examples, and [README_example_usage.txt](README_example_usage.txt) for worked example of building database and query, and running the query against the database.
 
 ## Reference
 
