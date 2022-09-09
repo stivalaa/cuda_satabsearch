@@ -39,7 +39,7 @@ import sys,os
 import getopt
 from time import strftime,localtime
 
-import numpy.oldnumeric as Numeric
+import oldnumeric as Numeric
 
 #-----------------------------------------------------------------------------
 #

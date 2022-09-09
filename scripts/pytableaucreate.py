@@ -64,7 +64,7 @@ import pickle
 import random
 import copy
 from math import degrees
-import numpy.oldnumeric as Numeric
+import oldnumeric as Numeric
 from Bio.PDB import *
 
 import ptsecstruct

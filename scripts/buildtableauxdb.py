@@ -55,7 +55,7 @@ import re
 import getopt
 import pickle
 
-import numpy.oldnumeric as Numeric
+import oldnumeric as Numeric
 
 import ptsecstruct
 from ptnode import ptnode_set_verbose
