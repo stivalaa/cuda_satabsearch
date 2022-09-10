@@ -91,7 +91,7 @@ def build_db(input_root,
     Parameters:
        input_root - root of PDB or ASTRAL pdbstyle divided hierarchy
        secstruct_program - secondary structure definition program
-                       ('stride' or 'dssp' or 'pdb') to use.
+                       ('stride', 'dssp', 'dssp4' or 'pdb') to use.
        domain_progam - domain decompositino method ('ddomain','cath', etc.)
        include_310_helices - if True, include 3_10 helices in the graph
        include_pi_helices - if True, include pi helices in the graph
@@ -184,7 +184,7 @@ def usage(progname):
                      "ddomain, cath:cdffile, pdomains:pdomainsfile\n")
     sys.stderr.write("  -t struct_prog : use struct_prog define " \
                      "secondary structure\n")
-    sys.stderr.write("       supported is 'pdb' or 'stride' or 'dssp' (default)\n")
+    sys.stderr.write("       supported is 'pdb', 'stride' 'dssp4', or 'dssp' (default)\n")
     sys.stderr.write("  -v print verbose debugging messages to stderr\n")
     sys.stderr.write("\nWARNING: dbname is overwritten if it exists\n")
     sys.exit(1)
@@ -231,7 +231,7 @@ def main():
     except getopt.GetoptError:
         usage(os.path.basename(sys.argv[0]))
 
-    valid_secstruct_programs = ["dssp", "stride", "pdb"]
+    valid_secstruct_programs = ["dssp", "stride", "pdb", "dssp4"]
     valid_domain_programs = getdomains.valid_domain_programs + [r"none"]
     valid_domain_programs_re = [ re.compile(re_str) for re_str in
                                  valid_domain_programs ]

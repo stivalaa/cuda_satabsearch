@@ -1020,7 +1020,7 @@ def get_tableaux(pdb_filename,
     Parameters:
        pdb_filename - filename of PDB or ASTRAL pdb-style file, as above.
        secstruct_program - secondary structure definition program
-                       ('stride' or 'dssp' or 'pdb') to use.
+                       ('stride', 'dssp', 'dssp4', or 'pdb') to use.
        domain_progam - domain decompositino method ('ddomain','cath', etc.)
        include_310_helices - if True, include 3_10 helices in the graph
        include_pi_helices - if True, include pi helices in the graph
