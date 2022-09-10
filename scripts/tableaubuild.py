@@ -853,7 +853,7 @@ def make_tableaux(pdb_filename,
        pdb_filename - filename of PDB file to read
        pdb_struct - Bio.PDB parsed PDB structure
        secstruct_program - secondary structure definition program
-                       ('stride' or 'dssp' or 'pdb') to use.
+                       ('stride', 'dssp', 'dssp4', or 'pdb') to use.
        domain_progam - domain decompositino method ('ddomain','cath', etc.)
        include_310_helices - if True, include 3_10 helices in the graph
        include_pi_helices - if True, include pi helices in the graph
@@ -903,6 +903,8 @@ def make_tableaux(pdb_filename,
             secstruct = ptsecstruct.read_secstruct_from_stride(pdb_filename)
         elif secstruct_program == "dssp":
             secstruct = ptsecstruct.read_secstruct_from_dssp(pdb_filename)
+        elif secstruct_program == "dssp4":
+            secstruct = ptsecstruct.read_secstruct_from_dssp4(pdb_filename)
         else:
             assert(False)
 

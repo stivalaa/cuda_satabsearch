@@ -561,6 +561,59 @@ def read_secstruct_from_dssp(pdb_filename, pdb_secstruct = None):
         sys.stderr.write(str(ptsecstruct))
     return ptsecstruct
     
+def read_secstruct_from_dssp4(pdb_filename, pdb_secstruct = None):
+    """
+    Build and return an instance of the PTSecStruct class
+    which represents the secondary structure as assigned
+    by the DSSP program
+    (Kabsch and Sander 1983 "Dictionary of Protein Secondary Structure:
+     Pattern Recognition of Hydrogen-Bonded and Geometrical Features"
+     Biopolymers 22:2577-2637).
+
+    This function for DSSP version 4
+    See https://github.com/PDB-REDO/dssp
+    Note using old DSSP output format - not only does this just allow
+    us to reuse existing parsing code here, but in fact the new
+    output format "currently lacks a lot of information that was 
+    available in the old format" [as per mkdssp documentation 
+    as of September 2022].
+
+    So all this function does differently from read_secstrct_from_dssp()
+    is it called mkdssp with --output-format=dssp rather than dsspcmbi
+    with no options.
+
+    Parameters:
+        pdb_filename - filename of PDB file to run DSSP against
+        pdb_secstruct (read/write) default None
+                       - a previously built PTSecStruct
+                        (eg from PDB HELIX and SHEET cards).
+                        If this is not None, only hydrogen bond information
+                        is read, and added to this PTSecstruct.
+
+    Return value:
+        PTSecStruct class representing secondary structure and H bonds
+        ass assigned by DSSP (see following comments).
+        
+    The class is instantiated by supplying a file handle of an open
+    PDB file (for reading)
+    to the constructor. DSSP is run with that PDB file as input and
+    the secondary structure assignments are parsed
+    from the DSSP output.
+
+    Note the DSSP executable is actually 'mkdssp' not 'dssp'.
+    """
+
+    if verbose:
+        sys.stderr.write("running mkdssp...")
+    fd = os.popen("mkdssp --output-format=dssp " + pdb_filename)
+    ptsecstruct = parse_dssp_output(fd, pdb_secstruct)
+    fd.close()
+    if verbose:
+        sys.stderr.write("done\n")
+        sys.stderr.write(str(ptsecstruct))
+    return ptsecstruct
+    
+
 
 def parse_dssp_output(filehandle, pdb_secstruct):
     """

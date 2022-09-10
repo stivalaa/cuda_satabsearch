@@ -233,7 +233,7 @@ def usage(progname):
     sys.stderr.write("  -a domainid : only output for specified domain\n")
     sys.stderr.write("  -t struct_prog : use struct_prog define " \
                      "secondary structure\n")
-    sys.stderr.write("       supported is 'pdb' (default) or 'stride' or 'dssp'\n")
+    sys.stderr.write("       supported is 'pdb' (default) or 'stride' or 'dssp' or 'dssp4'\n")
     sys.stderr.write("  -s sse_num_list : specifies comma-separated list of "
                      "SSE sequential numbers to include in the tableau\n")
     sys.stderr.write("  -m min_sse_len : minimum number of residues in SSE to "
@@ -294,7 +294,8 @@ def main():
     -a domainid : only output specified domain
 
     -t specifies the secondary structure assignment program to use.
-       Currently suppoed is 'pdb' and 'dfh,ssp' and 'stride'. Default 'pdb'.
+       Currently suppoed is 'pdb' and 'dssp' and 'dssp4' and 'stride'. 
+       Default 'pdb'.
 
     -s sse_num_list specifies a comman-separated
        list of SSE sequential ids to build the
@@ -336,7 +337,7 @@ def main():
     except getopt.GetoptError:
         usage(os.path.basename(sys.argv[0]))
 
-    valid_secstruct_programs = ["dssp", "stride", "pdb"]
+    valid_secstruct_programs = ["dssp", "stride", "pdb", "dssp4"]
     valid_domain_programs = getdomains.valid_domain_programs + [r"none"]
     valid_domain_programs_re = [ re.compile(re_str) for re_str in
                                  valid_domain_programs ]
