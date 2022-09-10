@@ -16,7 +16,7 @@
 import sys
 from time import strftime,localtime
 
-from numpy.oldnumeric import array
+from oldnumeric import array
 from Bio.PDB import Vector
 
 def mfile_write_prelude(fh):

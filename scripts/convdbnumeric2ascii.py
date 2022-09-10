@@ -22,7 +22,7 @@
 
 import sys
 import pickle
-import numpy.oldnumeric as Numeric
+import oldnumeric as Numeric
 
 
 """

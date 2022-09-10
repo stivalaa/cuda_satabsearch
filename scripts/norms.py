@@ -27,7 +27,7 @@
 
 """
 import sys,os,glob
-import numpy.oldnumeric as Numeric
+import oldnumeric as Numeric
 
 
 

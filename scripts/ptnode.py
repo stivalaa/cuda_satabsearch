@@ -25,8 +25,8 @@
 import sys
 from math import pi,atan2,acos
 
-from numpy.oldnumeric import array
-from numpy.oldnumeric.linear_algebra import singular_value_decomposition  # part of Numeric
+from oldnumeric import array
+from oldnumeric.linear_algebra import singular_value_decomposition  # part of Numeric
 from Bio.PDB import *
 
 from ptsecstruct import stride_chainid_to_pdb_chainid
