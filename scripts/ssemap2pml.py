@@ -214,10 +214,13 @@ def usage(progname):
     Print usage message and exit
     """
     
-    sys.stderr.write("Usage: " +progname + " [-d domainid] [-s] [-u query_pdbfile] [-b db_pdbfile] \n")
+    sys.stderr.write("Usage: " +progname + " [-5] [-d domainid] [-s] [-u query_pdbfile] [-b db_pdbfile] \n")
     sys.stderr.write(
         "-d domainid: only output for this domain, not all\n"
         "-s: color the query structure with matching SSEs also.\n"
+        "-5: use new 5-column (name rawscore norm2score zscore pvalue)\n"
+        "    format not old 2-column (name rawscore) format\n"
+        "-u query_pdbfile:  filename of query PDB file. If not specified then\n"
         "   Only valid if there is only one domain (either becuase -d is\n"
         "   specified or there is only one in the input).\n"
         "-u query_pdbfile:  filename of query PDB file. If not specified then\n"
@@ -236,9 +239,11 @@ def main():
     """
     main for ssemap2pml.py
 
-    Usage: ssemap2pml.py [-d domainid] [-s] [-u query_pdbfile] [-b db_pdbfile]
+    Usage: ssemap2pml.py [-5] [-d domainid] [-s] [-u query_pdbfile] [-b db_pdbfile]
 
     -d domainid: only output for this domain, not all
+    -5: use new 5-column (name rawscore norm2score zscore pvalue) format not
+        old 2-column (name rawscore) format
     -s: color the query structure with matching SSEs also.
         Only valid if there is only one domain (either becuase -d is
         specified or there is only one in the input).
@@ -278,13 +283,16 @@ def main():
     color_query = False
     query_pdbfile = None
     db_pdbfile = None
-    
+    use5col = False
+
     try:
-        opts,args = getopt.getopt(sys.argv[1:], "sd:u:b:")
+        opts,args = getopt.getopt(sys.argv[1:], "5sd:u:b:")
     except:
         usage(os.path.basename(sys.argv[0]))
     for opt,arg in opts:
-        if opt == "-d": # domain id specified, only get this one
+        if opt == "-5": # use 5 column score format
+            use5col = True
+        elif opt == "-d": # domain id specified, only get this one
             dbdomid = arg
         elif opt == "-s": # also color SSEs matched in the query structure
             color_query = True
@@ -298,7 +306,7 @@ def main():
     if len(args) != 0:
         usage(os.path.basename(sys.argv[0]))
 
-    search_maps = parse_ssemap(sys.stdin)
+    search_maps = parse_ssemap(sys.stdin, use5col)
     if (color_query and not dbdomid and len(search_maps.query_ssemap_list) > 1):
         sys.stderr.write("WARNING: -s specfied without -d and more than one "
                          "structure on input: ignored -s option\n")
