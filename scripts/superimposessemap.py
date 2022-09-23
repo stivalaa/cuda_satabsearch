@@ -248,9 +248,11 @@ def usage(progname):
     Print usage message and exit
     """
     
-    sys.stderr.write("Usage: " +progname + " [-d domainid] [-u query_pdbfile] [-b db_pdbfile] [-o outputdir] \n")
+    sys.stderr.write("Usage: " +progname + " [-d domainid] [-5] [-u query_pdbfile] [-b db_pdbfile] [-o outputdir] \n")
     sys.stderr.write(
         "-d domainid: use this structure, if more than one in input\n"
+        "-5: use new 5-column (name rawscore norm2score zscore pvalue)\n"
+        "    format not old 2-column (name rawscore) format\n"
         "-u query_pdbfile:  filename of query PDB file. If not specified then\n"
         "               identifier is used to find in ASTRAL SCOP hierarchy.\n"
         "-b db_pdbfile:  filename of database PDB file. If not specfied then\n"
@@ -266,7 +268,7 @@ def main():
     """
     main for superimposessemap.py
 
-    Usage: superimposessemap.py [-d domainid] [-s] [-u query_pdbfile] [-b db_pdbfile] [-o outputdir]
+    Usage: superimposessemap.py [-d domainid] [-5] [-u query_pdbfile] [-b db_pdbfile] [-o outputdir]
 
     -d domainid: only output for this domain, not all
     -u query_pdbfile:  filename of query PDB file. If not specified then
@@ -276,7 +278,8 @@ def main():
                    Only valid if there is only one domain (either becuase -d is
                    specified or there is only one in the input).
     -o outputdir: directory to write PDB files of superimposed structures in.
-
+    -5: use new 5-column (name rawscore norm2score zscore pvalue) format not
+        old 2-column (name rawscore) format
                  
     Input is on stdin, the output of soln2ssemap.py,
     identifier and score (as per input), then
@@ -318,13 +321,16 @@ def main():
     query_pdbfile = None
     db_pdbfile = None
     outputdir = None
+    use5col = False
     
     try:
-        opts,args = getopt.getopt(sys.argv[1:], "d:u:b:o:")
+        opts,args = getopt.getopt(sys.argv[1:], "5d:u:b:o:")
     except:
         usage(os.path.basename(sys.argv[0]))
     for opt,arg in opts:
-        if opt == "-d": # domain id specified, only get this one
+        if opt == "-5": # use 5 column score format
+            use5col = True
+        elif opt == "-d": # domain id specified, only get this one
             dbdomid = arg
         elif opt == "-u":  # query PDB filename
             query_pdbfile = arg
@@ -338,7 +344,7 @@ def main():
     if len(args) != 0:
         usage(os.path.basename(sys.argv[0]))
 
-    search_maps = parse_ssemap(sys.stdin)
+    search_maps = parse_ssemap(sys.stdin, use5col)
 
     if (db_pdbfile and not dbdomid and len(search_maps.query_ssemap_list) > 1):
         sys.stderr.write("ERROR: -b specified without -d and more than one "
