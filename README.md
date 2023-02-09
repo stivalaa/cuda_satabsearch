@@ -207,3 +207,6 @@ If you use our software, data, or results in your research, please cite:
 Stivala, A., Stuckey, P., Wirth, A.,
 [Fast and accurate protein substructure searching with simulated annealing and GPUs](http://www.biomedcentral.com/1471-2105/11/446) BMC Bioinformatics 2010, 11:446
 
+For details on how the z-scores and p-values are computed, see http://munk.cis.unimelb.edu.au/pro-origami/tableaustats.pdf, or Chapter 6 of:
+
+Stivala, A. D. (2010). [Algorithms for the study of RNA and protein structure](http://hdl.handle.net/11343/35772). PhD thesis, Computer Science and Software Engineering, The University of Melbourne.
