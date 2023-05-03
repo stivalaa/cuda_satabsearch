@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Stivala"
+  given-names: "Alex"
+  orcid: "https://orcid.org/0000-0002-2442-4743"
+- family-names: "Stuckey"
+  given-names: "Peter"
+- family-names: "Wirth"
+  given-names: "Tony"
+title: "Fast and accurate protein substructure searching with simulated annealing and GPUs"
+url: "https://github.com/stivalaa/cuda_satabsearch"
+preferred-citation:
+  type: article
+  title: "Fast and accurate protein substructure searching with simulated annealing and GPUs"
+  authors:
+    - family-names: "Stivala"
+      given-names: "Alex"
+      orcid: "https://orcid.org/0000-0002-2442-4743"
+    - family-names: "Stuckey"
+      given-names: "Peter"
+    - family-names: "Wirth"
+      given-names: "Tony"
+  doi: 10.1186/1471-2105-11-446
+  journal: BMC Bioinformatics
+  year: 2010
+  volume: 11
+  start: 446
