@@ -7,7 +7,7 @@ authors:
 - family-names: "Stuckey"
   given-names: "Peter"
 - family-names: "Wirth"
-  given-names: "Tony"
+  given-names: "Anthony"
 title: "Fast and accurate protein substructure searching with simulated annealing and GPUs"
 url: "https://github.com/stivalaa/cuda_satabsearch"
 preferred-citation:
@@ -20,7 +20,7 @@ preferred-citation:
     - family-names: "Stuckey"
       given-names: "Peter"
     - family-names: "Wirth"
-      given-names: "Tony"
+      given-names: "Anthony"
   doi: 10.1186/1471-2105-11-446
   journal: BMC Bioinformatics
   year: 2010
