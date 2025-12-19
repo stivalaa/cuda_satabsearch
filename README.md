@@ -5,6 +5,8 @@ Fast and accurate protein substructure searching with simulated annealing and GP
 
 Imported from https://sites.google.com/site/alexdstivala/home/satabsearch
 
+Also available with Zenodo DOI: [![DOI](https://zenodo.org/badge/132065777.svg)](https://doi.org/10.5281/zenodo.17992747)
+
 This software can be used freely for any purpose, modified, redistributed, etc.
 with no restrictions, except where noted that NVIDIA SDK sample code
 is used by "This software contains source code provided by NVIDIA Corporation.",
